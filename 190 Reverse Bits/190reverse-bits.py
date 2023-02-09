@@ -1,0 +1,10 @@
+class Solution:
+    def reverseBits(self, n: int) -> int:
+        answer = 0
+
+        for i in range(32):
+            answer <<= 1
+            answer = answer ^ (n & 1)
+            n >>= 1
+        
+        return answer
