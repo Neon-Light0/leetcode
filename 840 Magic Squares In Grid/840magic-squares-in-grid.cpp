@@ -2,44 +2,47 @@ class Solution {
 public:
     int numMagicSquaresInside(vector<vector<int>>& grid) {
         int count = 0;
+        int n = grid.size();
+        int m = grid[0].size();
 
-        for (int i = 0; i + 2 < (int) grid.size(); i++){
-            for (int j = 0; j + 2 < (int) grid[0].size(); j++){
-                int found[9] = {0,0,0,0,0,0,0,0,0};
-                bool badValueFound = false;
+        for (int i = 0; i < n - 2; i++) {
+            for (int j = 0; j < m - 2; j++) {
+                int found[9] = {0};
+                bool doBreak = false;
 
-                std::cout << i << ", " << j << std::endl;
-                std::cout << grid.size() - 3 << ", " << grid[0].size() - 3 << std::endl;
+                for (int k = 0; k < 3; k++){
+                    for (int l = 0; l < 3; l++){
+                        int r = i + k;
+                        int c = j + l;
 
-                for (int k = i; k < i + 3; k++){
-                    for (int l = j; l < j + 3; l++){
-                        if (grid[k][l] <= 9 && grid[k][l] > 0 && found[grid[k][l] - 1] == 0){
-                            found[grid[k][l] - 1] = 1;
-                        } else {
-                            badValueFound = true;
+                        if (grid[r][c] < 1 || grid[r][c] > 9 || found[grid[r][c] - 1] >= 1){
+                            doBreak = true;
                             break;
+                        } else {
+                            found[grid[r][c] - 1] += 1;
                         }
                     }
 
-                    if (badValueFound) break;
+                    if (doBreak) break;
                 }
+                
+                if (doBreak) continue;
 
-                if (badValueFound) continue;
+                int firstRowSum = grid[i][j] + grid[i][j + 1] + grid[i][j + 2];
+                int secondRowSum = grid[i+1][j] + grid[i+1][j + 1] + grid[i+1][j + 2];
+                int thirdRowSum = grid[i+2][j] + grid[i+2][j + 1] + grid[i+2][j + 2];
 
-                int row1 = grid[i][j] + grid[i][j + 1] + grid[i][j + 2];
-                int row2 = grid[i+1][j] + grid[i+1][j + 1] + grid[i+1][j + 2];
-                int row3 = grid[i+2][j] + grid[i+2][j + 1] + grid[i+2][j + 2];
+                int firstColSum = grid[i][j] + grid[i+1][j] + grid[i+2][j];
+                int secondColSum = grid[i][j+1] + grid[i+1][j+1] + grid[i+2][j+1];
+                int thirdColSum = grid[i][j+2] + grid[i+1][j+2] + grid[i+2][j+2];
 
-                int col1 = grid[i][j] + grid[i+1][j] + grid[i+2][j];
-                int col2 = grid[i][j+1] + grid[i+1][j+1] + grid[i+2][j+1];
-                int col3 = grid[i][j+2] + grid[i+1][j+2] + grid[i+2][j+2];
+                int firstDiagSum = grid[i][j] + grid[i+1][j+1] + grid[i+2][j+2];
+                int secondDiagSum = grid[i][j+2] + grid[i+1][j+1] + grid[i+2][j];
 
-                int diag1 = grid[i][j] + grid[i+1][j+1] + grid[i+2][j+2];
-                int diag2 = grid[i][j+2] + grid[i+1][j+1] + grid[i+2][j];
-
-                if (row1 == row2 && row2 == row3 && row3 == col1 && col1 == col2 && col2 == col3 && col3 == diag1 && diag1 == diag2){
-                    count++;
-                }
+                if (firstRowSum == secondRowSum && secondRowSum == thirdRowSum && thirdRowSum == firstColSum && firstColSum == secondColSum && 
+                    secondColSum == thirdColSum && thirdColSum == firstDiagSum && firstDiagSum == secondDiagSum){
+                        count += 1;
+                    }
             }
         }
 
