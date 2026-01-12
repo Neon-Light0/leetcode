@@ -1,15 +1,18 @@
 class Solution {
 public:
     int minTimeToVisitAllPoints(vector<vector<int>>& points) {
-        int answer = 0;
+        int res = 0;
 
-        for (std::size_t i = 1; i < points.size(); i++ ){
-            int xDiff = std::abs(points[i][0] - points[i-1][0]);
-            int yDiff = std::abs(points[i][1] - points[i-1][1]);
+        for (int i = 0; i < points.size() - 1; i++){
+            int x1 = points[i][0], y1 = points[i][1];
+            int x2 = points[i+1][0], y2 = points[i+1][1];
 
-            answer += std::max(xDiff, yDiff);
+            int xDiff = std::abs(x1 - x2);
+            int yDiff = std::abs(y1 - y2);
+
+            res += std::max(xDiff, yDiff);
         }
 
-        return answer;
+        return res;
     }
 };
